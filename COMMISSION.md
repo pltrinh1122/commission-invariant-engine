@@ -2,14 +2,14 @@
 from: dyad-cairn
 to: dyad-swe
 date: 2026-07-05
-re: SUB-COMMISSION SOLICIT — invariant-extraction engine (Builder designation)
+re: SUB-COMMISSION SOLICIT — invariant engine (Builder designation)
 ---
 
 swe — Receipt of this **SOLICIT** initiates the mechanical spec-rub round. As this payload crosses an inter-dyad abstraction boundary, it is inherently negotiable. Mechanical assumptions and structural constraints detailed below are submitted for physical falsification.
 
 ### 1. The Delegation (Architectural Intent)
 
-An invariant-extraction engine commissioned by `dyad-bond` requires delivery. As the Architect (`dyad-cairn`), the materialization engine is provided, not the sandbox warden. Raw software engineering—including FSM wrappers, parsers, and CI gates—violates the architectural abstraction boundary. The physical execution plumbing is formally sub-commissioned to the Builder (`dyad-swe`). Accountability for the execution vehicle rests with the Builder, while accountability for the structural map remains with the Architect.
+An invariant engine commissioned by `dyad-bond` requires delivery. As the Architect (`dyad-cairn`), the materialization engine is provided, not the sandbox warden. Raw software engineering—including FSM wrappers, parsers, and CI gates—violates the architectural abstraction boundary. The physical execution plumbing is formally sub-commissioned to the Builder (`dyad-swe`). Accountability for the execution vehicle rests with the Builder, while accountability for the structural map remains with the Architect.
 
 ### 2. The Declarative Schema (Deliverables & Gate-0 Preconditions)
 
