@@ -5,7 +5,7 @@ import yaml
 from unittest.mock import patch
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-from commissions import invariant_extractor
+from src import invariant_extractor
 
 def test_f1_determinism():
     """F-1: Two consecutive runs over identical sources differ by >=1 byte => REFUTED."""
@@ -13,7 +13,7 @@ def test_f1_determinism():
     sidecar_content = b"bond:123:\n  root_kind: constraint\n"
     
     shas = {"fake.md": "sha1"}
-    with patch("commissions.invariant_extractor.get_git_sha", return_value="fake_sha"):
+    with patch("src.invariant_extractor.get_git_sha", return_value="fake_sha"):
         out1 = invariant_extractor.run_extraction([md_content], shas, sidecar_content, "bond")
         out2 = invariant_extractor.run_extraction([md_content], shas, sidecar_content, "bond")
         assert out1 == out2
@@ -50,7 +50,7 @@ def test_f8_merge_id_integrity_orphan_sidecar():
 
 def test_a1_dirty_tree():
     """A-1: Dirty tree run => HALT."""
-    with patch("commissions.invariant_extractor.is_git_clean", return_value=False):
+    with patch("src.invariant_extractor.is_git_clean", return_value=False):
         with pytest.raises(SystemExit) as exc_info:
             invariant_extractor.validate_preconditions()
         assert exc_info.value.code == invariant_extractor.HALT_DIRTY_TREE
@@ -61,7 +61,7 @@ def test_f1_2_sha_determinism():
     sidecar_content = b"bond:123:\n  z: 1\n  a: 2\n"
     shas1 = {"fake.md": "sha1"}
     shas2 = {"fake.md": "sha1"} # Exact same content but a different dictionary object
-    with patch("commissions.invariant_extractor.get_git_sha", return_value="fake_sha"):
+    with patch("src.invariant_extractor.get_git_sha", return_value="fake_sha"):
         out1 = invariant_extractor.run_extraction([md_content], shas1, sidecar_content, "bond")
         out2 = invariant_extractor.run_extraction([md_content], shas2, sidecar_content, "bond")
     assert out1 == out2
@@ -84,7 +84,7 @@ def test_f3_staleness_guard():
     """F-3: Staleness guard arms on mutated sha."""
     md_content = "<!-- INV@v1 bond:123 | test -->\n"
     sidecar_content = b"bond:123:\n  root_kind: constraint\n"
-    with patch("commissions.invariant_extractor.get_git_sha", return_value="fake_sha"):
+    with patch("src.invariant_extractor.get_git_sha", return_value="fake_sha"):
         out = invariant_extractor.run_extraction([md_content], {"f": "s1"}, sidecar_content, "bond")
     
     out_data = yaml.safe_load(out)
@@ -98,7 +98,7 @@ def test_f7_2_encoding_eol(tmp_path):
     with open(md, "wb") as f:
         f.write(b"<!-- INV@v1 bond:123 | a -->\r\n")
     
-    with patch("commissions.invariant_extractor.get_file_sha", return_value="sha"):
+    with patch("src.invariant_extractor.get_file_sha", return_value="sha"):
         with pytest.raises(SystemExit) as exc_info:
             invariant_extractor.read_sources([str(md)])
         assert exc_info.value.code == invariant_extractor.HALT_ENCODING_EOL
@@ -119,7 +119,7 @@ def test_f7_4_mid_scan_toctou(tmp_path):
     def mock_get_file_sha(path):
         return shas.pop(0)
         
-    with patch("commissions.invariant_extractor.get_file_sha", side_effect=mock_get_file_sha):
+    with patch("src.invariant_extractor.get_file_sha", side_effect=mock_get_file_sha):
         with pytest.raises(SystemExit) as exc_info:
             invariant_extractor.read_sources([str(md)])
         assert exc_info.value.code == invariant_extractor.HALT_TOCTOU
